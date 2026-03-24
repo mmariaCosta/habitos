@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { Toaster } from './components/ui/sonner';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 import LandingPage from './pages/LandingPage';
 import Dashboard from './pages/Dashboard';
 import Leaderboard from './pages/Leaderboard';
@@ -101,6 +102,7 @@ function App() {
     <BrowserRouter>
       <AuthProvider>
         <div className="App">
+          <PWAInstallPrompt />
           <AppContent />
         </div>
       </AuthProvider>
