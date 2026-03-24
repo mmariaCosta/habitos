@@ -1,0 +1,169 @@
+{
+  "design_system": {
+    "identity": {
+      "name": "LevelUp - Gamified Productivity",
+      "tone": "Arcade, Competitive, High-Energy, Focus-Driven",
+      "visual_metaphor": "Cyberpunk RPG HUD (Heads-Up Display)",
+      "theme_mode": "dark"
+    },
+    "typography": {
+      "font_family": {
+        "headings": "Outfit, sans-serif",
+        "body": "Plus Jakarta Sans, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "scale": {
+        "h1": "text-5xl md:text-7xl font-bold tracking-tight",
+        "h2": "text-4xl md:text-5xl font-bold tracking-tight",
+        "h3": "text-2xl md:text-3xl font-semibold",
+        "body": "text-base md:text-lg text-muted-foreground leading-relaxed",
+        "caption": "text-xs uppercase tracking-widest font-mono text-muted-foreground"
+      },
+      "imports": [
+        "https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap"
+      ]
+    },
+    "colors": {
+      "palette": {
+        "background": "#050505",
+        "surface": "#09090b",
+        "surface_highlight": "#18181b",
+        "border": "#27272a",
+        "primary": "#7C3AED",
+        "primary_glow": "#8B5CF6",
+        "secondary": "#FACC15",
+        "accent_cyan": "#06B6D4",
+        "accent_pink": "#EC4899",
+        "success": "#22c55e",
+        "text_primary": "#FFFFFF",
+        "text_secondary": "#A1A1AA"
+      },
+      "usage": {
+        "primary": "Main Brand Color, CTAs, Active States (Purple)",
+        "secondary": "Gold/XP, Trophies, High-Value Rewards (Yellow)",
+        "accent_cyan": "Progress Bars, Streaks, Mana/Energy (Cyan)",
+        "accent_pink": "Health, Urgent Tasks, Alerts (Pink)",
+        "background": "Deep Void Black (Avoid pure black #000000, use #050505)"
+      },
+      "gradients": {
+        "hero_text": "bg-clip-text text-transparent bg-gradient-to-r from-violet-400 via-fuchsia-400 to-white",
+        "button_primary": "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-500 hover:to-indigo-500",
+        "card_glow": "bg-gradient-to-b from-white/5 to-transparent"
+      }
+    },
+    "components": {
+      "radius": "rounded-2xl",
+      "glassmorphism": {
+        "panel": "bg-black/40 backdrop-blur-xl border border-white/10 shadow-xl",
+        "hud": "bg-zinc-900/80 backdrop-blur-md border-t border-white/10"
+      },
+      "buttons": {
+        "primary": "h-12 px-8 rounded-xl font-bold tracking-wide shadow-[0_0_20px_rgba(124,58,237,0.3)] hover:shadow-[0_0_30px_rgba(124,58,237,0.5)] transition-all active:scale-95",
+        "secondary": "h-12 px-8 rounded-xl font-semibold bg-zinc-800 hover:bg-zinc-700 text-white border border-zinc-700 transition-all",
+        "ghost": "hover:bg-white/5 text-zinc-400 hover:text-white"
+      },
+      "cards": {
+        "base": "relative overflow-hidden bg-zinc-900/50 border border-white/5 p-6 rounded-2xl transition-all hover:border-violet-500/30 group",
+        "interactive": "cursor-pointer hover:-translate-y-1 hover:shadow-2xl hover:shadow-violet-900/20"
+      }
+    },
+    "layout": {
+      "spacing_scale": "generous",
+      "grid_system": "Bento Grid (Asymmetric)",
+      "container": "max-w-7xl mx-auto px-4 md:px-8",
+      "z_index": {
+        "default": 0,
+        "background_effects": -1,
+        "content": 10,
+        "sticky_nav": 40,
+        "modal": 50,
+        "toast": 60
+      }
+    },
+    "assets": {
+      "icons": "Lucide React (Default)",
+      "images": {
+        "hero_bg": "https://images.unsplash.com/photo-1762278804772-6f5bb8eea759?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "auth_bg": "https://images.unsplash.com/photo-1769120064066-4ab270e38ea8?crop=entropy&cs=srgb&fm=jpg&q=85",
+        "avatars": [
+          "https://images.unsplash.com/photo-1772371272152-d1806d4351e0?crop=entropy&cs=srgb&fm=jpg&q=85",
+          "https://images.unsplash.com/photo-1772371272141-0fbd644b65c4?crop=entropy&cs=srgb&fm=jpg&q=85",
+          "https://images.unsplash.com/photo-1772371272218-d39eca1efdeb?crop=entropy&cs=srgb&fm=jpg&q=85"
+        ],
+        "badges": {
+          "gold": "https://images.unsplash.com/photo-1624365169806-1517fcb873d7?crop=entropy&cs=srgb&fm=jpg&q=85",
+          "trophy": "https://images.pexels.com/photos/35119581/pexels-photo-35119581.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940"
+        }
+      }
+    }
+  },
+  "pages": {
+    "landing": {
+      "structure": [
+        "Hero Section (H1 + CTA + 3D Avatar Floating)",
+        "Gamification Explainer (Grid of features: XP, Leaderboard, Badges)",
+        "Social Proof/Leaderboard Teaser (Top 3 Players Mockup)",
+        "CTA Footer"
+      ],
+      "key_elements": "Use 'Tracing Beam' effect on feature cards. Hero background must be the 'Abstract glowing lines'."
+    },
+    "dashboard": {
+      "structure": "Bento Grid Layout",
+      "widgets": [
+        {
+          "name": "Daily Quest",
+          "size": "col-span-full md:col-span-8 row-span-2",
+          "content": "Active Timer/Task + Progress Bar"
+        },
+        {
+          "name": "Character Stats",
+          "size": "col-span-full md:col-span-4 row-span-1",
+          "content": "Level Circle (Recharts Pie), Current XP, Streak Flame"
+        },
+        {
+          "name": "Leaderboard Mini",
+          "size": "col-span-full md:col-span-4 row-span-2",
+          "content": "Top 3 + User Rank"
+        },
+        {
+          "name": "Habits Grid",
+          "size": "col-span-full",
+          "content": "Horizontal scrollable list of daily habits (checkboxes)"
+        }
+      ]
+    },
+    "leaderboard": {
+      "style": "Podium Style for Top 3, List for rest.",
+      "visuals": "Gold/Silver/Bronze border glows. Sticky user rank at bottom."
+    }
+  },
+  "implementation_instructions": {
+    "global_css": [
+      "Add @import for fonts in index.css",
+      "Set body bg to #050505",
+      "Add .glass class for reuse"
+    ],
+    "tailwind_config": {
+      "colors": {
+        "game-primary": "#7C3AED",
+        "game-accent": "#06B6D4",
+        "game-gold": "#FACC15"
+      },
+      "animation": {
+        "pulse-glow": "pulse-glow 2s infinite"
+      }
+    },
+    "interactive_elements": [
+      "Buttons must scale down (scale-95) on click",
+      "Cards must lift (-translate-y-1) on hover",
+      "Use Sonner for XP gain notifications (Toast with custom styling)"
+    ]
+  },
+  "universal_guidelines": [
+    "Do not use generic gray backgrounds. Use tinted blacks (#050505).",
+    "Always add data-testid to interactive elements.",
+    "Use 'framer-motion' for entering animations (staggerChildren).",
+    "Dark mode is DEFAULT. Do not implement light mode toggle unless requested.",
+    "Use Lucide icons: 'Flame' for streaks, 'Trophy' for leaderboard, 'Target' for focus."
+  ]
+}
