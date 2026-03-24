@@ -1,0 +1,113 @@
+{
+  "timestamp": "2026-03-24T16:22:31.064018",
+  "total_tests": 21,
+  "passed_tests": 21,
+  "success_rate": 100.0,
+  "results": [
+    {
+      "test": "Root API",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "User Registration",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Register for Login Test",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "User Login",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Current User",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get User Stats",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Leaderboard",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Create Habit",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Habits",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Complete Habit",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Delete Habit",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Create Task",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Tasks",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Complete Task",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Delete Task",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Start Study Session",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Complete Study Session",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Study Stats",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Achievements",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Get Challenges",
+      "success": true,
+      "details": "Status: 200"
+    },
+    {
+      "test": "Add XP",
+      "success": true,
+      "details": "Status: 200"
+    }
+  ]
+}
