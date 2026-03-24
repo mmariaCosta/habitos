@@ -39,6 +39,7 @@ jobs:
         run: yarn build
         env:
           PUBLIC_URL: /habitos
+          CI: false
 
       - name: Setup Pages
         uses: actions/configure-pages@v4
