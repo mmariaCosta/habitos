@@ -126,4 +126,12 @@ export const api = {
     });
     return response.data;
   },
+
+  // Calendar
+  getCalendarData: async (days = 30) => {
+    const response = await axios.get(`${API_URL}/calendar?days=${days}`, {
+      headers: getAuthHeader()
+    });
+    return response.data;
+  },
 };

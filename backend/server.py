@@ -69,7 +69,11 @@ class HabitCreate(BaseModel):
     name: str
     category: str
     color: str
+    icon: str = "Target"
     frequency: str = "daily"
+    goal: int = 1
+    reminder_time: Optional[str] = None
+    days_of_week: List[str] = []
 
 class Habit(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -78,15 +82,25 @@ class Habit(BaseModel):
     name: str
     category: str
     color: str
+    icon: str
     frequency: str
+    goal: int
+    reminder_time: Optional[str]
+    days_of_week: List[str]
     completed_today: bool = False
+    current_progress: int = 0
     streak: int = 0
     last_completed: Optional[str] = None
+    completion_dates: List[str] = []
 
 class TaskCreate(BaseModel):
     title: str
     category: str
     xp_reward: int = 10
+    priority: str = "medium"
+    due_date: Optional[str] = None
+    icon: str = "CheckSquare"
+    color: str = "#7C3AED"
 
 class Task(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -96,7 +110,12 @@ class Task(BaseModel):
     category: str
     completed: bool = False
     xp_reward: int
+    priority: str
+    due_date: Optional[str]
+    icon: str
+    color: str
     created_at: str
+    completed_at: Optional[str] = None
 
 class StudySessionStart(BaseModel):
     category: str
@@ -147,6 +166,13 @@ class LeaderboardEntry(BaseModel):
     avatar_index: int
     is_bot: bool = False
 
+class CalendarData(BaseModel):
+    date: str
+    habits_completed: int
+    tasks_completed: int
+    study_time: int
+    xp_gained: int
+
 # ============ AUTH HELPERS ============
 
 def hash_password(password: str) -> str:
@@ -185,9 +211,9 @@ def xp_for_level(level: int) -> int:
 
 def generate_bots(count: int = 10) -> List[LeaderboardEntry]:
     bot_names = [
-        "CodeMaster", "StudyNinja", "FocusWarrior", "BrainBooster", "TaskHunter",
-        "ProductivityKing", "LearnLegend", "HabitHero", "XPSeeker", "MindMaster",
-        "FlowState", "GrindMachine", "LevelUpLord", "QuestQueen", "SkillSurge"
+        "PixelMaster", "RetroHero", "8BitWarrior", "CodeNinja", "StudyGamer",
+        "QuestSeeker", "LevelUpLord", "XPHunter", "BitBoss", "PixelKing",
+        "RetroChamp", "GameMaster", "ByteHero", "ChipWizard", "ArcadeAce"
     ]
     bots = []
     for i in range(count):
@@ -337,10 +363,16 @@ async def create_habit(habit_data: HabitCreate, user_id: str = Depends(get_curre
         "name": habit_data.name,
         "category": habit_data.category,
         "color": habit_data.color,
+        "icon": habit_data.icon,
         "frequency": habit_data.frequency,
+        "goal": habit_data.goal,
+        "reminder_time": habit_data.reminder_time,
+        "days_of_week": habit_data.days_of_week,
         "completed_today": False,
+        "current_progress": 0,
         "streak": 0,
         "last_completed": None,
+        "completion_dates": [],
         "created_at": datetime.now(timezone.utc).isoformat()
     }
     await db.habits.insert_one(habit)
@@ -357,10 +389,23 @@ async def complete_habit(habit_id: str, user_id: str = Depends(get_current_user)
     if not habit:
         raise HTTPException(status_code=404, detail="Hábito não encontrado")
     
+    today = datetime.now(timezone.utc).date().isoformat()
     xp_reward = 20
+    
+    completion_dates = habit.get('completion_dates', [])
+    if today not in completion_dates:
+        completion_dates.append(today)
+    
     await db.habits.update_one(
         {"id": habit_id},
-        {"$set": {"completed_today": True, "last_completed": datetime.now(timezone.utc).isoformat()}, "$inc": {"streak": 1}}
+        {
+            "$set": {
+                "completed_today": True,
+                "last_completed": datetime.now(timezone.utc).isoformat(),
+                "completion_dates": completion_dates
+            },
+            "$inc": {"streak": 1, "current_progress": 1}
+        }
     )
     await db.users.update_one({"id": user_id}, {"$inc": {"xp": xp_reward}})
     
@@ -389,7 +434,12 @@ async def create_task(task_data: TaskCreate, user_id: str = Depends(get_current_
         "category": task_data.category,
         "completed": False,
         "xp_reward": task_data.xp_reward,
-        "created_at": datetime.now(timezone.utc).isoformat()
+        "priority": task_data.priority,
+        "due_date": task_data.due_date,
+        "icon": task_data.icon,
+        "color": task_data.color,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "completed_at": None
     }
     await db.tasks.insert_one(task)
     return Task(**task)
@@ -405,7 +455,10 @@ async def complete_task(task_id: str, user_id: str = Depends(get_current_user)):
     if not task:
         raise HTTPException(status_code=404, detail="Tarefa não encontrada")
     
-    await db.tasks.update_one({"id": task_id}, {"$set": {"completed": True}})
+    await db.tasks.update_one(
+        {"id": task_id},
+        {"$set": {"completed": True, "completed_at": datetime.now(timezone.utc).isoformat()}}
+    )
     await db.users.update_one({"id": user_id}, {"$inc": {"xp": task['xp_reward']}})
     
     user = await db.users.find_one({"id": user_id}, {"_id": 0})
@@ -563,6 +616,54 @@ async def get_challenges(user_id: str = Depends(get_current_user)):
     ]
     
     return challenges
+
+# ============ CALENDAR ============
+
+@api_router.get("/calendar", response_model=List[CalendarData])
+async def get_calendar_data(user_id: str = Depends(get_current_user), days: int = 30):
+    habits = await db.habits.find({"user_id": user_id}, {"_id": 0}).to_list(100)
+    tasks = await db.tasks.find({"user_id": user_id}, {"_id": 0}).to_list(100)
+    sessions = await db.study_sessions.find({"user_id": user_id}, {"_id": 0}).to_list(100)
+    
+    calendar_data = {}
+    
+    # Process habits
+    for habit in habits:
+        for date_str in habit.get('completion_dates', []):
+            if date_str not in calendar_data:
+                calendar_data[date_str] = {"habits": 0, "tasks": 0, "study_time": 0, "xp": 0}
+            calendar_data[date_str]["habits"] += 1
+            calendar_data[date_str]["xp"] += 20
+    
+    # Process tasks
+    for task in tasks:
+        if task.get('completed') and task.get('completed_at'):
+            date_str = task['completed_at'][:10]
+            if date_str not in calendar_data:
+                calendar_data[date_str] = {"habits": 0, "tasks": 0, "study_time": 0, "xp": 0}
+            calendar_data[date_str]["tasks"] += 1
+            calendar_data[date_str]["xp"] += task.get('xp_reward', 10)
+    
+    # Process study sessions
+    for session in sessions:
+        if session.get('completed_at'):
+            date_str = session['started_at'][:10]
+            if date_str not in calendar_data:
+                calendar_data[date_str] = {"habits": 0, "tasks": 0, "study_time": 0, "xp": 0}
+            calendar_data[date_str]["study_time"] += session.get('duration', 0)
+            calendar_data[date_str]["xp"] += session.get('xp_gained', 0)
+    
+    result = []
+    for date_str, data in sorted(calendar_data.items(), reverse=True):
+        result.append(CalendarData(
+            date=date_str,
+            habits_completed=data["habits"],
+            tasks_completed=data["tasks"],
+            study_time=data["study_time"],
+            xp_gained=data["xp"]
+        ))
+    
+    return result[:days]
 
 # ============ ROOT ============
 
