@@ -38,7 +38,7 @@ jobs:
         working-directory: frontend
         run: yarn build
         env:
-          PUBLIC_URL: /habitos
+          PUBLIC_URL: /habitos-jogo
           CI: false
 
       - name: Setup Pages
