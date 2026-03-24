@@ -99,7 +99,7 @@ function AppContent() {
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/habitos">
       <AuthProvider>
         <div className="App">
           <PWAInstallPrompt />
